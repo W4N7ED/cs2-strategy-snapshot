@@ -6,12 +6,14 @@ import { useStorage } from "../hooks/use-storage";
 import { toast } from "../hooks/use-toast";
 import { Badge } from "../components/ui/badge";
 import { Button } from "../components/ui/button";
-import { Map, Bomb, BookOpen, Search } from "lucide-react";
+import { Map, Bomb, BookOpen, Search, ShieldAlert } from "lucide-react";
+import { useAuth } from "../contexts/auth-context";
 
 const Index = () => {
   const navigate = useNavigate();
   const { state, isLoading, setCurrentMap } = useStorage();
   const { maps } = state;
+  const { isAuthenticated } = useAuth();
 
   const handleMapClick = (mapId: string) => {
     setCurrentMap(mapId);
@@ -32,7 +34,16 @@ const Index = () => {
   return (
     <div className="min-h-screen pb-20">
       <header className="bg-background p-4 sticky top-0 z-10 shadow-sm">
-        <h1 className="text-2xl font-bold text-center">CS2 Strategy Snapshot</h1>
+        <div className="flex items-center justify-between">
+          <h1 className="text-2xl font-bold text-center flex-1">CS2 Strategy Snapshot</h1>
+          <Button 
+            variant="ghost" 
+            size="icon"
+            onClick={() => navigate(isAuthenticated ? '/admin/profile' : '/admin/login')}
+          >
+            <ShieldAlert className="h-5 w-5" />
+          </Button>
+        </div>
       </header>
 
       <main className="container px-4 py-6">

@@ -11,6 +11,10 @@ import StrategyList from "./pages/StrategyList";
 import MapPositions from "./pages/MapPositions";
 import Binds from "./pages/Binds";
 import NotFound from "./pages/NotFound";
+import AdminLogin from "./pages/AdminLogin";
+import AdminProfile from "./pages/AdminProfile";
+import { ProtectedRoute } from "./components/ProtectedRoute";
+import { AuthProvider } from "./contexts/auth-context";
 import { useEffect } from "react";
 import { toast } from "@/hooks/use-toast";
 
@@ -38,21 +42,32 @@ const App = () => {
 
   return (
     <QueryClientProvider client={queryClient}>
-      <TooltipProvider>
-        <Toaster />
-        <Sonner />
-        <BrowserRouter>
-          <Routes>
-            <Route path="/" element={<Index />} />
-            <Route path="/maps/:mapId" element={<MapDetail />} />
-            <Route path="/maps/:mapId/utilities/:utilityType" element={<UtilityList />} />
-            <Route path="/maps/:mapId/strategies" element={<StrategyList />} />
-            <Route path="/maps/:mapId/positions" element={<MapPositions />} />
-            <Route path="/binds" element={<Binds />} />
-            <Route path="*" element={<NotFound />} />
-          </Routes>
-        </BrowserRouter>
-      </TooltipProvider>
+      <AuthProvider>
+        <TooltipProvider>
+          <Toaster />
+          <Sonner />
+          <BrowserRouter>
+            <Routes>
+              <Route path="/" element={<Index />} />
+              <Route path="/maps/:mapId" element={<MapDetail />} />
+              <Route path="/maps/:mapId/utilities/:utilityType" element={<UtilityList />} />
+              <Route path="/maps/:mapId/strategies" element={<StrategyList />} />
+              <Route path="/maps/:mapId/positions" element={<MapPositions />} />
+              <Route path="/binds" element={<Binds />} />
+              <Route path="/admin/login" element={<AdminLogin />} />
+              <Route 
+                path="/admin/profile" 
+                element={
+                  <ProtectedRoute>
+                    <AdminProfile />
+                  </ProtectedRoute>
+                } 
+              />
+              <Route path="*" element={<NotFound />} />
+            </Routes>
+          </BrowserRouter>
+        </TooltipProvider>
+      </AuthProvider>
     </QueryClientProvider>
   );
 };
