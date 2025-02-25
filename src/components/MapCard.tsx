@@ -18,7 +18,7 @@ export function MapCard({ map, onClick }: MapCardProps) {
 
   return (
     <Card
-      className="bg-secondary rounded-lg p-4 transition-all duration-300 hover:shadow-lg hover:shadow-accent/10 hover:translate-y-[-2px] cursor-pointer overflow-hidden"
+      className="bg-secondary rounded-lg p-2 transition-all duration-300 hover:shadow-lg hover:shadow-accent/10 hover:translate-y-[-2px] cursor-pointer overflow-hidden"
       onClick={onClick}
     >
       <div className="aspect-video rounded-md overflow-hidden bg-muted">
@@ -30,15 +30,15 @@ export function MapCard({ map, onClick }: MapCardProps) {
           onError={() => setImageError(true)}
         />
       </div>
-      <div className="mt-3">
-        <h3 className="text-xl font-semibold text-foreground">{map.name}</h3>
-        <div className="mt-2 flex flex-wrap gap-2">
-          <Badge variant="outline" className="flex items-center gap-1">
-            <span className="h-2 w-2 rounded-full bg-accent"></span>
+      <div className="mt-2">
+        <h3 className="text-lg font-semibold text-foreground truncate">{map.name}</h3>
+        <div className="mt-1 flex flex-wrap gap-1">
+          <Badge variant="outline" className="flex items-center gap-1 text-xs">
+            <span className="h-1.5 w-1.5 rounded-full bg-accent"></span>
             {strategyCount} stratégies
           </Badge>
-          <Badge variant="outline" className="flex items-center gap-1">
-            <span className="h-2 w-2 rounded-full bg-primary"></span>
+          <Badge variant="outline" className="flex items-center gap-1 text-xs">
+            <span className="h-1.5 w-1.5 rounded-full bg-primary"></span>
             {utilityCount} utilitaires
           </Badge>
         </div>
