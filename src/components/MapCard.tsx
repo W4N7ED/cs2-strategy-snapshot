@@ -17,11 +17,12 @@ export function MapCard({ map, onClick }: MapCardProps) {
       className="bg-secondary rounded-lg p-4 transition-all duration-300 hover:shadow-lg hover:shadow-accent/10 hover:translate-y-[-2px] cursor-pointer overflow-hidden"
       onClick={onClick}
     >
-      <div className="aspect-video overflow-hidden rounded-md">
+      <div className="aspect-video rounded-md overflow-hidden bg-muted">
         <img
           src={map.image}
           alt={map.name}
-          className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
+          className="h-full w-full object-cover"
+          loading="lazy"
         />
       </div>
       <div className="mt-3">
