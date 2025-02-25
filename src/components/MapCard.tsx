@@ -1,4 +1,5 @@
 
+import { useState } from "react";
 import { CSMap } from "../types";
 import { Card } from "./ui/card";
 import { Badge } from "./ui/badge";
@@ -9,8 +10,11 @@ interface MapCardProps {
 }
 
 export function MapCard({ map, onClick }: MapCardProps) {
+  const [imageError, setImageError] = useState(false);
   const strategyCount = map.strategies.length;
   const utilityCount = map.utilities.length;
+
+  const fallbackImage = "/placeholder.svg";
 
   return (
     <Card
@@ -19,10 +23,11 @@ export function MapCard({ map, onClick }: MapCardProps) {
     >
       <div className="aspect-video rounded-md overflow-hidden bg-muted">
         <img
-          src={map.image}
+          src={imageError ? fallbackImage : map.image}
           alt={map.name}
           className="h-full w-full object-cover"
           loading="lazy"
+          onError={() => setImageError(true)}
         />
       </div>
       <div className="mt-3">
