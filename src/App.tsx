@@ -17,11 +17,28 @@ import { ProtectedRoute } from "./components/ProtectedRoute";
 import { AuthProvider } from "./contexts/auth-context";
 import { useEffect } from "react";
 import { toast } from "@/hooks/use-toast";
+import { App as CapApp } from '@capacitor/app';
 
 const queryClient = new QueryClient();
 
 const App = () => {
   useEffect(() => {
+    // Gestion des événements Capacitor (pour Android)
+    const setupCapacitorListeners = async () => {
+      // Vérifier si nous sommes dans un environnement Capacitor
+      if ((window as any).Capacitor) {
+        CapApp.addListener('backButton', ({ canGoBack }) => {
+          if (!canGoBack) {
+            CapApp.exitApp();
+          } else {
+            window.history.back();
+          }
+        });
+      }
+    };
+
+    setupCapacitorListeners();
+
     // Vérifier si le message a déjà été affiché
     const hasShownWarning = localStorage.getItem("hasShownMobileWarning");
     
@@ -38,6 +55,13 @@ const App = () => {
       // Marquer que le message a été affiché
       localStorage.setItem("hasShownMobileWarning", "true");
     }
+
+    return () => {
+      // Nettoyage des écouteurs Capacitor
+      if ((window as any).Capacitor) {
+        CapApp.removeAllListeners();
+      }
+    };
   }, []);
 
   return (
