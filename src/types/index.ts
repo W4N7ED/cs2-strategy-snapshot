@@ -24,6 +24,7 @@ export interface Utility {
   type: 'smoke' | 'flash' | 'grenade' | 'molotov';
   title: string;
   description: string;
+  side: 'T' | 'CT';
   media: MediaItem[];
   timestamp: number;
 }
