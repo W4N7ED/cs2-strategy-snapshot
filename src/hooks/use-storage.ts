@@ -27,56 +27,56 @@ export function useStorage() {
             {
               id: uuidv4(),
               name: 'Mirage',
-              image: 'https://static.wikia.nocookie.net/cswikia/images/4/4c/Csgo_mirage.jpg',
+              image: '/maps/mirage.jpg',
               strategies: [],
               utilities: []
             },
             {
               id: uuidv4(),
               name: 'Dust 2',
-              image: 'https://static.wikia.nocookie.net/cswikia/images/1/1e/Csgo_dust2.jpg',
+              image: '/maps/dust2.jpg',
               strategies: [],
               utilities: []
             },
             {
               id: uuidv4(),
               name: 'Inferno',
-              image: 'https://static.wikia.nocookie.net/cswikia/images/5/5d/Csgo_inferno.jpg',
+              image: '/maps/inferno.jpg',
               strategies: [],
               utilities: []
             },
             {
               id: uuidv4(),
               name: 'Nuke',
-              image: 'https://static.wikia.nocookie.net/cswikia/images/f/f2/Csgo_nuke.jpg',
+              image: '/maps/nuke.jpg',
               strategies: [],
               utilities: []
             },
             {
               id: uuidv4(),
               name: 'Overpass',
-              image: 'https://static.wikia.nocookie.net/cswikia/images/f/f4/Csgo_overpass.jpg',
+              image: '/maps/overpass.jpg',
               strategies: [],
               utilities: []
             },
             {
               id: uuidv4(),
               name: 'Ancient',
-              image: 'https://static.wikia.nocookie.net/cswikia/images/3/35/Csgo_ancient.jpg',
+              image: '/maps/ancient.jpg',
               strategies: [],
               utilities: []
             },
             {
               id: uuidv4(),
               name: 'Vertigo',
-              image: 'https://static.wikia.nocookie.net/cswikia/images/8/89/Csgo_vertigo.jpg',
+              image: '/maps/vertigo.jpg',
               strategies: [],
               utilities: []
             },
             {
               id: uuidv4(),
               name: 'Anubis',
-              image: 'https://static.wikia.nocookie.net/cswikia/images/e/e5/Anubis_cs2.jpg',
+              image: '/maps/anubis.jpg',
               strategies: [],
               utilities: []
             }
