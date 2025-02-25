@@ -6,7 +6,7 @@ import { useStorage } from "../hooks/use-storage";
 import { toast } from "../hooks/use-toast";
 import { Badge } from "../components/ui/badge";
 import { Button } from "../components/ui/button";
-import { Map, Bomb, BookOpen } from "lucide-react";
+import { Map, Bomb, BookOpen, Search } from "lucide-react";
 
 const Index = () => {
   const navigate = useNavigate();
@@ -126,6 +126,22 @@ const Index = () => {
           </div>
         </section>
       </main>
+
+      {/* Bouton de recherche en bas à gauche */}
+      <div className="fixed bottom-20 left-4 z-40">
+        <Button 
+          size="icon" 
+          className="h-12 w-12 rounded-full shadow-lg bg-accent hover:bg-accent/90"
+          onClick={() => {
+            toast({
+              title: "Recherche",
+              description: "Fonctionnalité de recherche en cours de développement"
+            });
+          }}
+        >
+          <Search className="h-6 w-6 text-accent-foreground" />
+        </Button>
+      </div>
 
       <NavBar />
     </div>
