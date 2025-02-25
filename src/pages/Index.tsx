@@ -1,11 +1,11 @@
 
 import { useNavigate } from "react-router-dom";
-import { NavBar } from "@/components/NavBar";
-import { MapCard } from "@/components/MapCard";
-import { useStorage } from "@/hooks/use-storage";
-import { toast } from "@/hooks/use-toast";
-import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
+import { NavBar } from "../components/NavBar";
+import { MapCard } from "../components/MapCard";
+import { useStorage } from "../hooks/use-storage";
+import { toast } from "../hooks/use-toast";
+import { Badge } from "../components/ui/badge";
+import { Button } from "../components/ui/button";
 import { Map, Bomb, BookOpen } from "lucide-react";
 
 const Index = () => {

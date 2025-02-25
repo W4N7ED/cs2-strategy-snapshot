@@ -1,5 +1,5 @@
 
-import { Home, Map, BookOpen, Plus } from "lucide-react";
+import { Home, Map, BookOpen, Plus, User } from "lucide-react";
 import { Link, useLocation } from "react-router-dom";
 
 export function NavBar() {
@@ -11,13 +11,13 @@ export function NavBar() {
   };
 
   return (
-    <nav className="cs-navbar">
-      <Link to="/" className={`cs-navbar-icon ${isActive("/") ? "cs-navbar-icon-active" : ""}`}>
+    <nav className="fixed bottom-0 left-0 right-0 bg-secondary border-t border-border flex justify-around items-center p-3 z-50">
+      <Link to="/" className={`flex flex-col items-center justify-center text-muted-foreground transition-all hover:text-foreground active:scale-95 ${isActive("/") ? "text-accent" : ""}`}>
         <Home className="h-6 w-6" />
         <span className="text-xs mt-1">Accueil</span>
       </Link>
       
-      <Link to="/maps" className={`cs-navbar-icon ${isActive("/maps") ? "cs-navbar-icon-active" : ""}`}>
+      <Link to="/maps" className={`flex flex-col items-center justify-center text-muted-foreground transition-all hover:text-foreground active:scale-95 ${isActive("/maps") ? "text-accent" : ""}`}>
         <Map className="h-6 w-6" />
         <span className="text-xs mt-1">Cartes</span>
       </Link>
@@ -29,12 +29,12 @@ export function NavBar() {
         <span className="text-xs mt-1">Ajouter</span>
       </Link>
       
-      <Link to="/strategies" className={`cs-navbar-icon ${isActive("/strategies") ? "cs-navbar-icon-active" : ""}`}>
+      <Link to="/strategies" className={`flex flex-col items-center justify-center text-muted-foreground transition-all hover:text-foreground active:scale-95 ${isActive("/strategies") ? "text-accent" : ""}`}>
         <BookOpen className="h-6 w-6" />
         <span className="text-xs mt-1">Stratégies</span>
       </Link>
       
-      <Link to="/profile" className={`cs-navbar-icon ${isActive("/profile") ? "cs-navbar-icon-active" : ""}`}>
+      <Link to="/profile" className={`flex flex-col items-center justify-center text-muted-foreground transition-all hover:text-foreground active:scale-95 ${isActive("/profile") ? "text-accent" : ""}`}>
         <div className="h-6 w-6 rounded-full bg-muted overflow-hidden flex items-center justify-center">
           <span className="text-xs font-medium">CS</span>
         </div>
