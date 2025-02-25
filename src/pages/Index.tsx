@@ -8,6 +8,7 @@ import { Badge } from "../components/ui/badge";
 import { Button } from "../components/ui/button";
 import { Map, Bomb, BookOpen, Search, ShieldAlert } from "lucide-react";
 import { useAuth } from "../contexts/auth-context";
+import { ThemeToggle } from "../components/ThemeToggle";
 
 const Index = () => {
   const navigate = useNavigate();
@@ -36,13 +37,16 @@ const Index = () => {
       <header className="bg-background p-4 sticky top-0 z-10 shadow-sm">
         <div className="flex items-center justify-between">
           <h1 className="text-2xl font-bold text-center flex-1">CS2 Strategy Snapshot</h1>
-          <Button 
-            variant="ghost" 
-            size="icon"
-            onClick={() => navigate(isAuthenticated ? '/admin/profile' : '/admin/login')}
-          >
-            <ShieldAlert className="h-5 w-5" />
-          </Button>
+          <div className="flex items-center gap-2">
+            <ThemeToggle />
+            <Button 
+              variant="ghost" 
+              size="icon"
+              onClick={() => navigate(isAuthenticated ? '/admin/profile' : '/admin/login')}
+            >
+              <ShieldAlert className="h-5 w-5" />
+            </Button>
+          </div>
         </div>
       </header>
 

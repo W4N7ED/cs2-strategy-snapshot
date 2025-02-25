@@ -15,6 +15,7 @@ import AdminLogin from "./pages/AdminLogin";
 import AdminProfile from "./pages/AdminProfile";
 import { ProtectedRoute } from "./components/ProtectedRoute";
 import { AuthProvider } from "./contexts/auth-context";
+import { ThemeProvider } from "./contexts/theme-context";
 import { useEffect } from "react";
 import { toast } from "@/hooks/use-toast";
 import { App as CapApp } from '@capacitor/app';
@@ -67,30 +68,32 @@ const App = () => {
   return (
     <QueryClientProvider client={queryClient}>
       <AuthProvider>
-        <TooltipProvider>
-          <Toaster />
-          <Sonner />
-          <BrowserRouter>
-            <Routes>
-              <Route path="/" element={<Index />} />
-              <Route path="/maps/:mapId" element={<MapDetail />} />
-              <Route path="/maps/:mapId/utilities/:utilityType" element={<UtilityList />} />
-              <Route path="/maps/:mapId/strategies" element={<StrategyList />} />
-              <Route path="/maps/:mapId/positions" element={<MapPositions />} />
-              <Route path="/binds" element={<Binds />} />
-              <Route path="/admin/login" element={<AdminLogin />} />
-              <Route 
-                path="/admin/profile" 
-                element={
-                  <ProtectedRoute>
-                    <AdminProfile />
-                  </ProtectedRoute>
-                } 
-              />
-              <Route path="*" element={<NotFound />} />
-            </Routes>
-          </BrowserRouter>
-        </TooltipProvider>
+        <ThemeProvider>
+          <TooltipProvider>
+            <Toaster />
+            <Sonner />
+            <BrowserRouter>
+              <Routes>
+                <Route path="/" element={<Index />} />
+                <Route path="/maps/:mapId" element={<MapDetail />} />
+                <Route path="/maps/:mapId/utilities/:utilityType" element={<UtilityList />} />
+                <Route path="/maps/:mapId/strategies" element={<StrategyList />} />
+                <Route path="/maps/:mapId/positions" element={<MapPositions />} />
+                <Route path="/binds" element={<Binds />} />
+                <Route path="/admin/login" element={<AdminLogin />} />
+                <Route 
+                  path="/admin/profile" 
+                  element={
+                    <ProtectedRoute>
+                      <AdminProfile />
+                    </ProtectedRoute>
+                  } 
+                />
+                <Route path="*" element={<NotFound />} />
+              </Routes>
+            </BrowserRouter>
+          </TooltipProvider>
+        </ThemeProvider>
       </AuthProvider>
     </QueryClientProvider>
   );
