@@ -14,13 +14,21 @@ const queryClient = new QueryClient();
 
 const App = () => {
   useEffect(() => {
-    // Check if running on web or mobile
-    const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
-    if (!isMobile) {
-      toast({
-        title: "Application CS2 Strategy Snapshot",
-        description: "Cette application est optimisée pour mobile. Certaines fonctionnalités comme l'accès à la caméra peuvent ne pas être disponibles sur le web."
-      });
+    // Vérifier si le message a déjà été affiché
+    const hasShownWarning = localStorage.getItem("hasShownMobileWarning");
+    
+    // Si le message n'a pas été affiché et que l'appareil n'est pas mobile
+    if (!hasShownWarning) {
+      const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+      if (!isMobile) {
+        toast({
+          title: "Application CS2 Strategy Snapshot",
+          description: "Cette application est optimisée pour mobile. Certaines fonctionnalités comme l'accès à la caméra peuvent ne pas être disponibles sur le web."
+        });
+      }
+      
+      // Marquer que le message a été affiché
+      localStorage.setItem("hasShownMobileWarning", "true");
     }
   }, []);
 
