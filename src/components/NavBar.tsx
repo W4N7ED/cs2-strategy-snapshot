@@ -1,5 +1,5 @@
 
-import { Home, Map, BookOpen, Plus, User } from "lucide-react";
+import { Home, Map, BookOpen, Plus, Keyboard } from "lucide-react";
 import { Link, useLocation } from "react-router-dom";
 
 export function NavBar() {
@@ -34,11 +34,9 @@ export function NavBar() {
         <span className="text-xs mt-1">Stratégies</span>
       </Link>
       
-      <Link to="/profile" className={`flex flex-col items-center justify-center text-muted-foreground transition-all hover:text-foreground active:scale-95 ${isActive("/profile") ? "text-accent" : ""}`}>
-        <div className="h-6 w-6 rounded-full bg-muted overflow-hidden flex items-center justify-center">
-          <span className="text-xs font-medium">CS</span>
-        </div>
-        <span className="text-xs mt-1">Profil</span>
+      <Link to="/binds" className={`flex flex-col items-center justify-center text-muted-foreground transition-all hover:text-foreground active:scale-95 ${isActive("/binds") ? "text-accent" : ""}`}>
+        <Keyboard className="h-6 w-6" />
+        <span className="text-xs mt-1">Binds</span>
       </Link>
     </nav>
   );

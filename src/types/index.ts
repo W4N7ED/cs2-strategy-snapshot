@@ -29,6 +29,14 @@ export interface Utility {
   timestamp: number;
 }
 
+export interface Bind {
+  id: string;
+  key: string;
+  command: string;
+  description: string;
+  category: 'communication' | 'movement' | 'combat' | 'utility' | 'other';
+}
+
 export interface CSMap {
   id: string;
   name: string;
@@ -40,4 +48,5 @@ export interface CSMap {
 export interface AppState {
   maps: CSMap[];
   currentMap: string | null;
+  binds: Bind[];
 }
