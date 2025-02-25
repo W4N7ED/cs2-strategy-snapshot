@@ -3,7 +3,7 @@ import { useParams, useNavigate } from "react-router-dom";
 import { useStorage } from "../hooks/use-storage";
 import { Button } from "../components/ui/button";
 import { NavBar } from "../components/NavBar";
-import { Zap, Cloud, Bomb, BookOpen } from "lucide-react";
+import { Zap, Cloud, Bomb, BookOpen, MapPin } from "lucide-react";
 
 export default function MapDetail() {
   const { mapId } = useParams();
@@ -31,7 +31,7 @@ export default function MapDetail() {
       </div>
 
       <main className="container px-4 py-6">
-        <div className="grid grid-cols-2 gap-4">
+        <div className="grid grid-cols-2 gap-4 mb-4">
           <Button
             variant="outline"
             className="flex flex-col items-center justify-center gap-2 h-24"
@@ -68,6 +68,15 @@ export default function MapDetail() {
             <span>Stratégies</span>
           </Button>
         </div>
+
+        <Button
+          variant="outline"
+          className="flex flex-col items-center justify-center gap-2 h-24 w-full"
+          onClick={() => navigate(`/maps/${mapId}/positions`)}
+        >
+          <MapPin className="h-8 w-8 text-green-500" />
+          <span>Poses</span>
+        </Button>
       </main>
 
       <NavBar />

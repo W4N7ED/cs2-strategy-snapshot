@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from 'react';
 import { toast } from './use-toast';
 import { v4 as uuidv4 } from 'uuid';
@@ -6,7 +7,7 @@ import { AppState, CSMap, MediaItem, Strategy, Utility } from '../types';
 const STORAGE_KEY = 'cs2-strategy-app-data';
 
 export function useStorage() {
-  const [state, setState] = useState<AppState>({ maps: [], currentMap: null });
+  const [state, setState] = useState<AppState>({ maps: [], currentMap: null, binds: [] });
   const [isLoading, setIsLoading] = useState(true);
 
   // Initialize with some default maps
@@ -81,8 +82,8 @@ export function useStorage() {
             }
           ];
           
-          setState({ maps: defaultMaps, currentMap: null });
-          saveToLocalStorage({ maps: defaultMaps, currentMap: null });
+          setState({ maps: defaultMaps, currentMap: null, binds: [] });
+          saveToLocalStorage({ maps: defaultMaps, currentMap: null, binds: [] });
         }
       } catch (error) {
         console.error('Error initializing storage:', error);

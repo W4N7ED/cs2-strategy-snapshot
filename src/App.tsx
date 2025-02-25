@@ -8,6 +8,7 @@ import Index from "./pages/Index";
 import MapDetail from "./pages/MapDetail";
 import UtilityList from "./pages/UtilityList";
 import StrategyList from "./pages/StrategyList";
+import MapPositions from "./pages/MapPositions";
 import Binds from "./pages/Binds";
 import NotFound from "./pages/NotFound";
 import { useEffect } from "react";
@@ -46,6 +47,7 @@ const App = () => {
             <Route path="/maps/:mapId" element={<MapDetail />} />
             <Route path="/maps/:mapId/utilities/:utilityType" element={<UtilityList />} />
             <Route path="/maps/:mapId/strategies" element={<StrategyList />} />
+            <Route path="/maps/:mapId/positions" element={<MapPositions />} />
             <Route path="/binds" element={<Binds />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
