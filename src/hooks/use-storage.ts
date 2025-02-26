@@ -2,7 +2,7 @@
 import { useState, useEffect } from 'react';
 import { toast } from './use-toast';
 import { v4 as uuidv4 } from 'uuid';
-import { AppState, CSMap, MediaItem, Strategy, Utility } from '../types';
+import { AppState, CSMap, MapCategory, MediaItem, Strategy, Utility } from '../types';
 
 const STORAGE_KEY = 'cs2-strategy-app-data';
 
@@ -20,7 +20,38 @@ export function useStorage() {
         const data = localStorage.getItem(STORAGE_KEY);
         
         if (data) {
-          setState(JSON.parse(data));
+          const parsedData = JSON.parse(data);
+          
+          // Si les cartes n'ont pas de catégorie, on les ajoute
+          if (parsedData.maps && parsedData.maps.length > 0 && !parsedData.maps[0].category) {
+            // Répartition des cartes par catégorie
+            const updatedMaps = parsedData.maps.map((map: CSMap, index: number) => {
+              let category: MapCategory;
+              
+              if (index < 3) {
+                category = 'premiere';
+              } else if (index < 6) {
+                category = 'competitive';
+              } else {
+                category = 'wingman';
+              }
+              
+              return {
+                ...map,
+                category
+              };
+            });
+            
+            const updatedData = {
+              ...parsedData,
+              maps: updatedMaps
+            };
+            
+            setState(updatedData);
+            saveToLocalStorage(updatedData);
+          } else {
+            setState(parsedData);
+          }
         } else {
           // Initialize with default maps
           const defaultMaps: CSMap[] = [
@@ -28,6 +59,7 @@ export function useStorage() {
               id: uuidv4(),
               name: 'Mirage',
               image: '/maps/mirage.jpg',
+              category: 'premiere',
               strategies: [],
               utilities: []
             },
@@ -35,6 +67,7 @@ export function useStorage() {
               id: uuidv4(),
               name: 'Dust 2',
               image: '/maps/dust2.jpg',
+              category: 'premiere',
               strategies: [],
               utilities: []
             },
@@ -42,6 +75,7 @@ export function useStorage() {
               id: uuidv4(),
               name: 'Inferno',
               image: '/maps/inferno.jpg',
+              category: 'premiere',
               strategies: [],
               utilities: []
             },
@@ -49,6 +83,7 @@ export function useStorage() {
               id: uuidv4(),
               name: 'Nuke',
               image: '/maps/nuke.jpg',
+              category: 'competitive',
               strategies: [],
               utilities: []
             },
@@ -56,6 +91,7 @@ export function useStorage() {
               id: uuidv4(),
               name: 'Overpass',
               image: '/maps/overpass.jpg',
+              category: 'competitive',
               strategies: [],
               utilities: []
             },
@@ -63,6 +99,7 @@ export function useStorage() {
               id: uuidv4(),
               name: 'Ancient',
               image: '/maps/ancient.jpg',
+              category: 'competitive',
               strategies: [],
               utilities: []
             },
@@ -70,6 +107,7 @@ export function useStorage() {
               id: uuidv4(),
               name: 'Vertigo',
               image: '/maps/vertigo.jpg',
+              category: 'wingman',
               strategies: [],
               utilities: []
             },
@@ -77,6 +115,7 @@ export function useStorage() {
               id: uuidv4(),
               name: 'Anubis',
               image: '/maps/anubis.jpg',
+              category: 'wingman',
               strategies: [],
               utilities: []
             }
@@ -109,6 +148,7 @@ export function useStorage() {
       id: uuidv4(),
       name: map.name,
       image: map.image,
+      category: map.category,
       strategies: [],
       utilities: []
     };

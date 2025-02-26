@@ -37,10 +37,13 @@ export interface Bind {
   category: 'communication' | 'movement' | 'combat' | 'utility' | 'other';
 }
 
+export type MapCategory = 'premiere' | 'competitive' | 'wingman';
+
 export interface CSMap {
   id: string;
   name: string;
   image: string;
+  category: MapCategory;
   strategies: Strategy[];
   utilities: Utility[];
 }

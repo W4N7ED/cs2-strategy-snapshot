@@ -101,6 +101,16 @@
   }
 }
 
+/* Masquer la barre de défilement horizontale tout en permettant le défilement */
+.hide-scrollbar {
+  -ms-overflow-style: none;  /* IE and Edge */
+  scrollbar-width: none;  /* Firefox */
+}
+
+.hide-scrollbar::-webkit-scrollbar {
+  display: none; /* Chrome, Safari, Opera */
+}
+
 /* Gestion des zones de sécurité pour les appareils modernes */
 /* Paddng pour les encoches et caméras perforées */
 .safe-top {

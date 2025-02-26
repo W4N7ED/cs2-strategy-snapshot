@@ -10,13 +10,15 @@ import { Map, Bomb, BookOpen, Search, ShieldAlert, ChevronUp, ChevronDown } from
 import { useAuth } from "../contexts/auth-context";
 import { ThemeToggle } from "../components/ThemeToggle";
 import { useState } from "react";
+import { MapCategory } from "../types";
 
 const Index = () => {
   const navigate = useNavigate();
   const { state, isLoading, setCurrentMap } = useStorage();
   const { maps } = state;
   const { isAuthenticated } = useAuth();
-  const [showAllMaps, setShowAllMaps] = useState(false);
+  const [showAllCategories, setShowAllCategories] = useState(false);
+  const [activeCategory, setActiveCategory] = useState<MapCategory>("premiere");
 
   const handleMapClick = (mapId: string) => {
     setCurrentMap(mapId);
@@ -26,8 +28,25 @@ const Index = () => {
   const totalStrategies = maps.reduce((total, map) => total + map.strategies.length, 0);
   const totalUtilities = maps.reduce((total, map) => total + map.utilities.length, 0);
 
-  const toggleShowAllMaps = () => {
-    setShowAllMaps(!showAllMaps);
+  const toggleShowAllCategories = () => {
+    setShowAllCategories(!showAllCategories);
+  };
+
+  const getCategoryMaps = (category: MapCategory) => {
+    return maps.filter(map => map.category === category);
+  };
+
+  const getCategoryLabel = (category: MapCategory) => {
+    switch (category) {
+      case "premiere":
+        return "Première";
+      case "competitive":
+        return "Compétitive";
+      case "wingman":
+        return "Wingman";
+      default:
+        return category;
+    }
   };
 
   if (isLoading) {
@@ -92,32 +111,59 @@ const Index = () => {
             <Badge 
               variant="outline" 
               className="flex items-center gap-1 cursor-pointer"
-              onClick={toggleShowAllMaps}
+              onClick={toggleShowAllCategories}
             >
               <Map className="h-3 w-3" />
-              {showAllMaps ? "Réduire" : "Voir tout"}
-              {showAllMaps ? <ChevronUp className="h-3 w-3 ml-1" /> : <ChevronDown className="h-3 w-3 ml-1" />}
+              {showAllCategories ? "Réduire" : "Voir tout"}
+              {showAllCategories ? <ChevronUp className="h-3 w-3 ml-1" /> : <ChevronDown className="h-3 w-3 ml-1" />}
             </Badge>
           </div>
           
-          <div className="grid grid-cols-2 gap-3">
-            {(showAllMaps ? maps : maps.slice(0, 4)).map((map) => (
-              <MapCard
-                key={map.id}
-                map={map}
-                onClick={() => handleMapClick(map.id)}
-              />
+          {/* Sélecteur de catégorie */}
+          <div className="flex gap-2 mb-4 overflow-x-auto pb-1 hide-scrollbar">
+            {(["premiere", "competitive", "wingman"] as MapCategory[]).map((category) => (
+              <Badge 
+                key={category}
+                variant={activeCategory === category ? "default" : "outline"}
+                className="cursor-pointer"
+                onClick={() => setActiveCategory(category)}
+              >
+                {getCategoryLabel(category)}
+              </Badge>
             ))}
           </div>
           
-          {!showAllMaps && maps.length > 4 && (
-            <Button 
-              variant="ghost" 
-              className="w-full mt-4"
-              onClick={toggleShowAllMaps}
-            >
-              Voir toutes les cartes
-            </Button>
+          {/* Si on affiche une seule catégorie */}
+          {!showAllCategories && (
+            <div className="grid grid-cols-2 gap-3">
+              {getCategoryMaps(activeCategory).map((map) => (
+                <MapCard
+                  key={map.id}
+                  map={map}
+                  onClick={() => handleMapClick(map.id)}
+                />
+              ))}
+            </div>
+          )}
+          
+          {/* Si on affiche toutes les catégories */}
+          {showAllCategories && (
+            <div className="space-y-6">
+              {(["premiere", "competitive", "wingman"] as MapCategory[]).map((category) => (
+                <div key={category}>
+                  <h3 className="text-lg font-medium mb-3">{getCategoryLabel(category)}</h3>
+                  <div className="grid grid-cols-2 gap-3">
+                    {getCategoryMaps(category).map((map) => (
+                      <MapCard
+                        key={map.id}
+                        map={map}
+                        onClick={() => handleMapClick(map.id)}
+                      />
+                    ))}
+                  </div>
+                </div>
+              ))}
+            </div>
           )}
         </section>
         
