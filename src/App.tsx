@@ -12,12 +12,14 @@ import NotFound from "./pages/NotFound";
 import MapPositions from "./pages/MapPositions";
 import Binds from "./pages/Binds";
 import AddUtility from "./pages/AddUtility";
+import AllMaps from "./pages/AllMaps";
 
 function App() {
   return (
     <>
       <Routes>
         <Route path="/" element={<Index />} />
+        <Route path="/maps" element={<AllMaps />} />
         <Route path="/maps/:mapId" element={<MapDetail />} />
         
         {/* Routes des stratégies */}

@@ -69,7 +69,7 @@ export function NavBar() {
   // Gestionnaire pour le clic sur le bouton Cartes
   const handleMapsClick = (e: React.MouseEvent) => {
     e.preventDefault();
-    navigate("/");
+    navigate("/maps");
   };
   
   // Gestionnaire pour le clic sur le bouton Stratégies
