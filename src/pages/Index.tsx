@@ -6,15 +6,17 @@ import { useStorage } from "../hooks/use-storage";
 import { toast } from "../hooks/use-toast";
 import { Badge } from "../components/ui/badge";
 import { Button } from "../components/ui/button";
-import { Map, Bomb, BookOpen, Search, ShieldAlert } from "lucide-react";
+import { Map, Bomb, BookOpen, Search, ShieldAlert, ChevronUp, ChevronDown } from "lucide-react";
 import { useAuth } from "../contexts/auth-context";
 import { ThemeToggle } from "../components/ThemeToggle";
+import { useState } from "react";
 
 const Index = () => {
   const navigate = useNavigate();
   const { state, isLoading, setCurrentMap } = useStorage();
   const { maps } = state;
   const { isAuthenticated } = useAuth();
+  const [showAllMaps, setShowAllMaps] = useState(false);
 
   const handleMapClick = (mapId: string) => {
     setCurrentMap(mapId);
@@ -23,6 +25,10 @@ const Index = () => {
 
   const totalStrategies = maps.reduce((total, map) => total + map.strategies.length, 0);
   const totalUtilities = maps.reduce((total, map) => total + map.utilities.length, 0);
+
+  const toggleShowAllMaps = () => {
+    setShowAllMaps(!showAllMaps);
+  };
 
   if (isLoading) {
     return (
@@ -34,7 +40,7 @@ const Index = () => {
 
   return (
     <div className="min-h-screen pb-20">
-      <header className="bg-background p-4 sticky top-0 z-10 shadow-sm">
+      <header className="bg-background p-4 sticky top-0 z-10 shadow-sm header-container">
         <div className="flex items-center justify-between">
           <h1 className="text-2xl font-bold text-center flex-1">CS2 Strategy Snapshot</h1>
           <div className="flex items-center gap-2">
@@ -86,15 +92,16 @@ const Index = () => {
             <Badge 
               variant="outline" 
               className="flex items-center gap-1 cursor-pointer"
-              onClick={() => navigate('/maps')}
+              onClick={toggleShowAllMaps}
             >
               <Map className="h-3 w-3" />
-              Voir tout
+              {showAllMaps ? "Réduire" : "Voir tout"}
+              {showAllMaps ? <ChevronUp className="h-3 w-3 ml-1" /> : <ChevronDown className="h-3 w-3 ml-1" />}
             </Badge>
           </div>
           
           <div className="grid grid-cols-2 gap-3">
-            {maps.slice(0, 4).map((map) => (
+            {(showAllMaps ? maps : maps.slice(0, 4)).map((map) => (
               <MapCard
                 key={map.id}
                 map={map}
@@ -103,11 +110,11 @@ const Index = () => {
             ))}
           </div>
           
-          {maps.length > 4 && (
+          {!showAllMaps && maps.length > 4 && (
             <Button 
               variant="ghost" 
               className="w-full mt-4"
-              onClick={() => navigate('/maps')}
+              onClick={toggleShowAllMaps}
             >
               Voir toutes les cartes
             </Button>
