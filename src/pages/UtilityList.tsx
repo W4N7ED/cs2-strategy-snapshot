@@ -1,5 +1,5 @@
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { useStorage } from "../hooks/use-storage";
 import { NavBar } from "../components/NavBar";
