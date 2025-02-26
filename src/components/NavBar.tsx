@@ -66,6 +66,9 @@ export function NavBar() {
   // Si l'utilisateur est sur une page de carte spécifique, on prépare un lien vers les stratégies de cette carte
   const currentMapId = location.pathname.match(/\/maps\/([^\/]+)/)?.[1];
   
+  // Déterminer si l'utilisateur est sur la page d'accueil
+  const isHomePage = path === "/" || path === "/index";
+  
   // Gestionnaire pour le clic sur le bouton Cartes
   const handleMapsClick = (e: React.MouseEvent) => {
     e.preventDefault();
@@ -112,13 +115,16 @@ export function NavBar() {
           <span className="text-xs mt-1">Ajouter</span>
         </button>
         
-        <button
-          onClick={handleStrategiesClick}
-          className={`flex flex-col items-center justify-center text-muted-foreground transition-all hover:text-foreground active:scale-95 ${isActive("/strategies") ? "text-accent" : ""}`}
-        >
-          <BookOpen className="h-6 w-6" />
-          <span className="text-xs mt-1">Stratégies</span>
-        </button>
+        {/* Afficher le bouton Stratégies uniquement lorsque l'utilisateur n'est pas sur la page d'accueil */}
+        {!isHomePage && (
+          <button
+            onClick={handleStrategiesClick}
+            className={`flex flex-col items-center justify-center text-muted-foreground transition-all hover:text-foreground active:scale-95 ${isActive("/strategies") ? "text-accent" : ""}`}
+          >
+            <BookOpen className="h-6 w-6" />
+            <span className="text-xs mt-1">Stratégies</span>
+          </button>
+        )}
         
         <Link to="/binds" className={`flex flex-col items-center justify-center text-muted-foreground transition-all hover:text-foreground active:scale-95 ${isActive("/binds") ? "text-accent" : ""}`}>
           <Keyboard className="h-6 w-6" />
