@@ -41,8 +41,7 @@ export default function UtilityList() {
     if (!selectedSide) return typeMatch;
     
     // Sinon, on filtre par côté en plus du type
-    // Note: Nous devons ajouter une propriété 'side' dans l'interface Utility
-    return typeMatch && (utility as any).side === selectedSide;
+    return typeMatch && utility.side === selectedSide;
   });
 
   const handleSelectSide = (side: 'CT' | 'T') => {
@@ -71,7 +70,7 @@ export default function UtilityList() {
           <Button 
             variant="ghost" 
             size="icon"
-            onClick={() => setShowSideSelector(true)}
+            onClick={() => navigate(`/maps/${mapId}/utilities/${utilityType}/add`)}
           >
             <Plus className="h-6 w-6" />
           </Button>
