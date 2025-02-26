@@ -66,9 +66,6 @@ export function NavBar() {
   // Si l'utilisateur est sur une page de carte spécifique, on prépare un lien vers les stratégies de cette carte
   const currentMapId = location.pathname.match(/\/maps\/([^\/]+)/)?.[1];
   
-  // Déterminer si l'utilisateur est sur la page d'accueil
-  const isHomePage = path === "/" || path === "/index";
-  
   // Gestionnaire pour le clic sur le bouton Cartes
   const handleMapsClick = (e: React.MouseEvent) => {
     e.preventDefault();
@@ -91,50 +88,42 @@ export function NavBar() {
   
   return (
     <>
-      <nav className="fixed bottom-0 left-0 right-0 bg-secondary border-t border-border flex items-center p-3 z-50">
-        <div className="flex justify-around items-center w-full relative">
-          <Link to="/" className={`flex flex-col items-center justify-center text-muted-foreground transition-all hover:text-foreground active:scale-95 ${isActive("/") ? "text-accent" : ""}`}>
-            <Home className="h-6 w-6" />
-            <span className="text-xs mt-1">Accueil</span>
-          </Link>
-          
-          <button
-            onClick={handleMapsClick}
-            className={`flex flex-col items-center justify-center text-muted-foreground transition-all hover:text-foreground active:scale-95 ${isActive("/maps") ? "text-accent" : ""}`}
-          >
-            <Map className="h-6 w-6" />
-            <span className="text-xs mt-1">Cartes</span>
-          </button>
-          
-          {/* Afficher le bouton Stratégies uniquement lorsque l'utilisateur n'est pas sur la page d'accueil */}
-          {!isHomePage && (
-            <button
-              onClick={handleStrategiesClick}
-              className={`flex flex-col items-center justify-center text-muted-foreground transition-all hover:text-foreground active:scale-95 ${isActive("/strategies") ? "text-accent" : ""}`}
-            >
-              <BookOpen className="h-6 w-6" />
-              <span className="text-xs mt-1">Stratégies</span>
-            </button>
-          )}
-          
-          <Link to="/binds" className={`flex flex-col items-center justify-center text-muted-foreground transition-all hover:text-foreground active:scale-95 ${isActive("/binds") ? "text-accent" : ""}`}>
-            <Keyboard className="h-6 w-6" />
-            <span className="text-xs mt-1">Binds</span>
-          </Link>
-        </div>
+      <nav className="fixed bottom-0 left-0 right-0 bg-secondary border-t border-border flex justify-around items-center p-3 z-50">
+        <Link to="/" className={`flex flex-col items-center justify-center text-muted-foreground transition-all hover:text-foreground active:scale-95 ${isActive("/") ? "text-accent" : ""}`}>
+          <Home className="h-6 w-6" />
+          <span className="text-xs mt-1">Accueil</span>
+        </Link>
         
-        {/* Bouton Ajouter centré et superposé sur la barre de navigation */}
-        <div className="absolute left-1/2 bottom-3 -translate-x-1/2">
-          <button 
-            onClick={handleAddClick}
-            className="flex flex-col items-center"
-          >
-            <div className="bg-accent rounded-full p-3 -mt-6 shadow-lg">
-              <Plus className="h-6 w-6 text-accent-foreground" />
-            </div>
-            <span className="text-xs mt-1">Ajouter</span>
-          </button>
-        </div>
+        <button
+          onClick={handleMapsClick}
+          className={`flex flex-col items-center justify-center text-muted-foreground transition-all hover:text-foreground active:scale-95 ${isActive("/maps") ? "text-accent" : ""}`}
+        >
+          <Map className="h-6 w-6" />
+          <span className="text-xs mt-1">Cartes</span>
+        </button>
+        
+        <button 
+          onClick={handleAddClick}
+          className="flex flex-col items-center"
+        >
+          <div className="bg-accent rounded-full p-3 -mt-8 shadow-lg">
+            <Plus className="h-6 w-6 text-accent-foreground" />
+          </div>
+          <span className="text-xs mt-1">Ajouter</span>
+        </button>
+        
+        <button
+          onClick={handleStrategiesClick}
+          className={`flex flex-col items-center justify-center text-muted-foreground transition-all hover:text-foreground active:scale-95 ${isActive("/strategies") ? "text-accent" : ""}`}
+        >
+          <BookOpen className="h-6 w-6" />
+          <span className="text-xs mt-1">Stratégies</span>
+        </button>
+        
+        <Link to="/binds" className={`flex flex-col items-center justify-center text-muted-foreground transition-all hover:text-foreground active:scale-95 ${isActive("/binds") ? "text-accent" : ""}`}>
+          <Keyboard className="h-6 w-6" />
+          <span className="text-xs mt-1">Binds</span>
+        </Link>
       </nav>
       
       {/* Dialog pour ajouter une nouvelle carte */}
