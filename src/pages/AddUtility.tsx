@@ -8,8 +8,10 @@ import { Input } from "../components/ui/input";
 import { Label } from "../components/ui/label";
 import { Textarea } from "../components/ui/textarea";
 import { toast } from "../hooks/use-toast";
-import { ArrowLeft } from "lucide-react";
+import { ArrowLeft, Image, Film, FileType, Trash2 } from "lucide-react";
 import { SideSelector } from "../components/SideSelector";
+import { MediaItem, MediaType } from "../types";
+import { v4 as uuidv4 } from "uuid";
 
 export default function AddUtility() {
   const { mapId, utilityType } = useParams();
@@ -21,6 +23,12 @@ export default function AddUtility() {
   const [description, setDescription] = useState("");
   const [showSideSelector, setShowSideSelector] = useState(false);
   const [selectedSide, setSelectedSide] = useState<'CT' | 'T' | null>(null);
+  const [mediaItems, setMediaItems] = useState<MediaItem[]>([]);
+  const [mediaTitle, setMediaTitle] = useState("");
+  const [mediaDesc, setMediaDesc] = useState("");
+  const [mediaUrl, setMediaUrl] = useState("");
+  const [mediaType, setMediaType] = useState<MediaType>("image");
+  const [showMediaForm, setShowMediaForm] = useState(false);
   
   // Vérifier que les paramètres nécessaires sont présents
   useEffect(() => {
@@ -37,6 +45,7 @@ export default function AddUtility() {
   
   // Validation
   const isFormValid = title.trim() !== "" && description.trim() !== "" && selectedSide !== null;
+  const isMediaFormValid = mediaTitle.trim() !== "" && mediaUrl.trim() !== "";
   
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -66,7 +75,7 @@ export default function AddUtility() {
       title,
       description,
       side: selectedSide,
-      media: []
+      media: mediaItems
     };
     
     try {
@@ -109,6 +118,97 @@ export default function AddUtility() {
       navigate(`/maps/${mapId}/utilities/${utilityType}`);
     } else {
       navigate("/");
+    }
+  };
+
+  const addMediaItem = () => {
+    if (!isMediaFormValid) return;
+
+    const newMediaItem: MediaItem = {
+      id: uuidv4(),
+      type: mediaType,
+      url: mediaUrl,
+      title: mediaTitle,
+      description: mediaDesc,
+      timestamp: Date.now()
+    };
+
+    setMediaItems([...mediaItems, newMediaItem]);
+    
+    // Reset form
+    setMediaTitle("");
+    setMediaDesc("");
+    setMediaUrl("");
+    setShowMediaForm(false);
+
+    toast({
+      title: "Média ajouté",
+      description: `${getMediaTypeLabel(mediaType)} ajouté à l'utilitaire`
+    });
+  };
+
+  const removeMediaItem = (id: string) => {
+    setMediaItems(mediaItems.filter(item => item.id !== id));
+    toast({
+      title: "Média supprimé"
+    });
+  };
+
+  const getMediaTypeLabel = (type: MediaType) => {
+    switch(type) {
+      case 'image': return 'Image';
+      case 'video': return 'Vidéo';
+      case 'gif': return 'GIF';
+      default: return 'Média';
+    }
+  };
+
+  const renderMediaPreview = (item: MediaItem) => {
+    switch(item.type) {
+      case 'image':
+        return (
+          <div className="relative">
+            <img 
+              src={item.url} 
+              alt={item.title} 
+              className="w-full h-32 object-cover rounded-md" 
+              onError={(e) => {
+                (e.target as HTMLImageElement).src = "/placeholder.svg";
+              }}
+            />
+          </div>
+        );
+      case 'gif':
+        return (
+          <div className="relative">
+            <img 
+              src={item.url} 
+              alt={item.title} 
+              className="w-full h-32 object-cover rounded-md" 
+              onError={(e) => {
+                (e.target as HTMLImageElement).src = "/placeholder.svg";
+              }}
+            />
+            <span className="absolute top-2 right-2 bg-black/50 text-white px-2 py-1 rounded text-xs">
+              GIF
+            </span>
+          </div>
+        );
+      case 'video':
+        return (
+          <div className="relative">
+            <div className="w-full h-32 bg-gray-800 rounded-md flex items-center justify-center">
+              <Film className="w-8 h-8 text-gray-400" />
+            </div>
+            <span className="absolute top-2 right-2 bg-black/50 text-white px-2 py-1 rounded text-xs">
+              Vidéo
+            </span>
+          </div>
+        );
+      default:
+        return <div className="w-full h-32 bg-gray-100 rounded-md flex items-center justify-center">
+          <FileType className="w-8 h-8 text-gray-400" />
+        </div>;
     }
   };
   
@@ -162,6 +262,135 @@ export default function AddUtility() {
             >
               {selectedSide ? (selectedSide === 'CT' ? 'Counter-Terrorist (CT)' : 'Terrorist (T)') : 'Sélectionner un côté'}
             </Button>
+          </div>
+
+          {/* Section des médias */}
+          <div className="space-y-3 pt-2">
+            <div className="flex items-center justify-between">
+              <Label className="text-lg">Médias</Label>
+              <Button 
+                type="button" 
+                variant="outline" 
+                size="sm"
+                onClick={() => setShowMediaForm(!showMediaForm)}
+              >
+                {showMediaForm ? "Annuler" : "Ajouter un média"}
+              </Button>
+            </div>
+
+            {/* Formulaire d'ajout de média */}
+            {showMediaForm && (
+              <div className="p-4 border rounded-md space-y-3 bg-muted/20">
+                <div>
+                  <Label htmlFor="media-type">Type de média</Label>
+                  <div className="flex gap-2 mt-2">
+                    <Button
+                      type="button"
+                      size="sm"
+                      variant={mediaType === 'image' ? 'default' : 'outline'}
+                      onClick={() => setMediaType('image')}
+                    >
+                      <Image className="mr-2 h-4 w-4" />
+                      Image
+                    </Button>
+                    <Button
+                      type="button"
+                      size="sm"
+                      variant={mediaType === 'video' ? 'default' : 'outline'}
+                      onClick={() => setMediaType('video')}
+                    >
+                      <Film className="mr-2 h-4 w-4" />
+                      Vidéo
+                    </Button>
+                    <Button
+                      type="button"
+                      size="sm"
+                      variant={mediaType === 'gif' ? 'default' : 'outline'}
+                      onClick={() => setMediaType('gif')}
+                    >
+                      <FileType className="mr-2 h-4 w-4" />
+                      GIF
+                    </Button>
+                  </div>
+                </div>
+
+                <div>
+                  <Label htmlFor="media-title">Titre du média</Label>
+                  <Input
+                    id="media-title"
+                    value={mediaTitle}
+                    onChange={(e) => setMediaTitle(e.target.value)}
+                    placeholder="Ex: Position de départ"
+                    className="mt-1"
+                  />
+                </div>
+
+                <div>
+                  <Label htmlFor="media-url">URL du média</Label>
+                  <Input
+                    id="media-url"
+                    value={mediaUrl}
+                    onChange={(e) => setMediaUrl(e.target.value)}
+                    placeholder="https://exemple.com/image.jpg"
+                    className="mt-1"
+                  />
+                </div>
+
+                <div>
+                  <Label htmlFor="media-desc">Description (optionnelle)</Label>
+                  <Textarea
+                    id="media-desc"
+                    value={mediaDesc}
+                    onChange={(e) => setMediaDesc(e.target.value)}
+                    placeholder="Description du média..."
+                    className="mt-1"
+                  />
+                </div>
+
+                <Button
+                  type="button"
+                  onClick={addMediaItem}
+                  disabled={!isMediaFormValid}
+                  className="w-full"
+                >
+                  Ajouter ce média
+                </Button>
+              </div>
+            )}
+
+            {/* Liste des médias */}
+            {mediaItems.length > 0 ? (
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-4">
+                {mediaItems.map(item => (
+                  <div key={item.id} className="border rounded-md overflow-hidden">
+                    {renderMediaPreview(item)}
+                    <div className="p-3">
+                      <div className="flex justify-between items-start">
+                        <div>
+                          <h3 className="font-medium">{item.title}</h3>
+                          {item.description && (
+                            <p className="text-sm text-muted-foreground mt-1">{item.description}</p>
+                          )}
+                        </div>
+                        <Button
+                          type="button"
+                          variant="ghost"
+                          size="icon"
+                          onClick={() => removeMediaItem(item.id)}
+                          className="text-destructive"
+                        >
+                          <Trash2 className="h-4 w-4" />
+                        </Button>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            ) : (
+              <div className="text-center py-8 border rounded-md text-muted-foreground">
+                Aucun média ajouté
+              </div>
+            )}
           </div>
           
           <Button
