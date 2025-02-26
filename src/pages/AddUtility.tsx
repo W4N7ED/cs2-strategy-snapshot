@@ -8,7 +8,7 @@ import { Input } from "../components/ui/input";
 import { Label } from "../components/ui/label";
 import { Textarea } from "../components/ui/textarea";
 import { toast } from "../hooks/use-toast";
-import { ArrowLeft, Image, Film, FileType, Trash2 } from "lucide-react";
+import { ArrowLeft, Image, Film, FileType, Trash2, Youtube } from "lucide-react";
 import { SideSelector } from "../components/SideSelector";
 import { MediaItem, MediaType } from "../types";
 import { v4 as uuidv4 } from "uuid";
@@ -121,16 +121,52 @@ export default function AddUtility() {
     }
   };
 
+  // Fonction pour extraire l'ID d'une vidéo YouTube à partir de son URL
+  const getYoutubeVideoId = (url: string): string | null => {
+    const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|&v=)([^#&?]*).*/;
+    const match = url.match(regExp);
+    return (match && match[2].length === 11) ? match[2] : null;
+  };
+
+  // Fonction pour vérifier si une URL est une URL YouTube
+  const isYoutubeUrl = (url: string): boolean => {
+    const videoId = getYoutubeVideoId(url);
+    return videoId !== null;
+  };
+
+  // Fonction pour obtenir l'URL de la miniature d'une vidéo YouTube
+  const getYoutubeThumbnailUrl = (videoId: string): string => {
+    return `https://img.youtube.com/vi/${videoId}/hqdefault.jpg`;
+  };
+
+  // Fonction pour convertir l'URL YouTube en URL d'intégration
+  const getYoutubeEmbedUrl = (videoId: string): string => {
+    return `https://www.youtube.com/embed/${videoId}`;
+  };
+
   const addMediaItem = () => {
     if (!isMediaFormValid) return;
 
+    let finalMediaType = mediaType;
+    let finalMediaUrl = mediaUrl;
+
+    // Vérifier si c'est une URL YouTube
+    if (mediaType === 'video' && isYoutubeUrl(mediaUrl)) {
+      const videoId = getYoutubeVideoId(mediaUrl);
+      if (videoId) {
+        finalMediaType = 'youtube';
+        finalMediaUrl = getYoutubeEmbedUrl(videoId);
+      }
+    }
+
     const newMediaItem: MediaItem = {
       id: uuidv4(),
-      type: mediaType,
-      url: mediaUrl,
+      type: finalMediaType as MediaType,
+      url: finalMediaUrl,
       title: mediaTitle,
       description: mediaDesc,
-      timestamp: Date.now()
+      timestamp: Date.now(),
+      youtubeId: finalMediaType === 'youtube' ? getYoutubeVideoId(mediaUrl) : undefined
     };
 
     setMediaItems([...mediaItems, newMediaItem]);
@@ -143,7 +179,7 @@ export default function AddUtility() {
 
     toast({
       title: "Média ajouté",
-      description: `${getMediaTypeLabel(mediaType)} ajouté à l'utilitaire`
+      description: `${getMediaTypeLabel(finalMediaType as MediaType)} ajouté à l'utilitaire`
     });
   };
 
@@ -158,6 +194,7 @@ export default function AddUtility() {
     switch(type) {
       case 'image': return 'Image';
       case 'video': return 'Vidéo';
+      case 'youtube': return 'YouTube';
       case 'gif': return 'GIF';
       default: return 'Média';
     }
@@ -176,6 +213,23 @@ export default function AddUtility() {
                 (e.target as HTMLImageElement).src = "/placeholder.svg";
               }}
             />
+          </div>
+        );
+      case 'youtube':
+        return (
+          <div className="relative">
+            <img 
+              src={item.youtubeId ? getYoutubeThumbnailUrl(item.youtubeId) : "/placeholder.svg"} 
+              alt={item.title} 
+              className="w-full h-32 object-cover rounded-md" 
+              onError={(e) => {
+                (e.target as HTMLImageElement).src = "/placeholder.svg";
+              }}
+            />
+            <span className="absolute top-2 right-2 bg-black/50 text-white px-2 py-1 rounded text-xs flex items-center">
+              <Youtube className="w-3 h-3 mr-1" />
+              YouTube
+            </span>
           </div>
         );
       case 'gif':
@@ -300,7 +354,7 @@ export default function AddUtility() {
                       onClick={() => setMediaType('video')}
                     >
                       <Film className="mr-2 h-4 w-4" />
-                      Vidéo
+                      Vidéo/YouTube
                     </Button>
                     <Button
                       type="button"
@@ -331,9 +385,14 @@ export default function AddUtility() {
                     id="media-url"
                     value={mediaUrl}
                     onChange={(e) => setMediaUrl(e.target.value)}
-                    placeholder="https://exemple.com/image.jpg"
+                    placeholder={mediaType === 'video' ? "https://youtube.com/watch?v=XXXX ou autre URL vidéo" : "https://exemple.com/image.jpg"}
                     className="mt-1"
                   />
+                  {mediaType === 'video' && (
+                    <p className="text-xs text-muted-foreground mt-1">
+                      Pour YouTube, copiez l'URL de la vidéo (ex: https://www.youtube.com/watch?v=XXXX)
+                    </p>
+                  )}
                 </div>
 
                 <div>

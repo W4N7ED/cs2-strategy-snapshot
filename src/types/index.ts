@@ -1,5 +1,5 @@
 
-export type MediaType = 'image' | 'gif' | 'video';
+export type MediaType = 'image' | 'gif' | 'video' | 'youtube';
 
 export interface MediaItem {
   id: string;
@@ -8,6 +8,7 @@ export interface MediaItem {
   title: string;
   description: string;
   timestamp: number;
+  youtubeId?: string;
 }
 
 export interface Strategy {
