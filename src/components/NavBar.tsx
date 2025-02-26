@@ -66,6 +66,26 @@ export function NavBar() {
   // Si l'utilisateur est sur une page de carte spécifique, on prépare un lien vers les stratégies de cette carte
   const currentMapId = location.pathname.match(/\/maps\/([^\/]+)/)?.[1];
   
+  // Gestionnaire pour le clic sur le bouton Cartes
+  const handleMapsClick = (e: React.MouseEvent) => {
+    e.preventDefault();
+    navigate("/");
+  };
+  
+  // Gestionnaire pour le clic sur le bouton Stratégies
+  const handleStrategiesClick = (e: React.MouseEvent) => {
+    e.preventDefault();
+    if (currentMapId) {
+      navigate(`/maps/${currentMapId}/strategies`);
+    } else {
+      // Si l'utilisateur n'est pas sur une page de carte spécifique, rediriger vers la page d'accueil
+      navigate("/");
+      toast({
+        description: "Veuillez d'abord sélectionner une carte",
+      });
+    }
+  };
+  
   return (
     <>
       <nav className="fixed bottom-0 left-0 right-0 bg-secondary border-t border-border flex justify-around items-center p-3 z-50">
@@ -74,10 +94,13 @@ export function NavBar() {
           <span className="text-xs mt-1">Accueil</span>
         </Link>
         
-        <Link to="/" className={`flex flex-col items-center justify-center text-muted-foreground transition-all hover:text-foreground active:scale-95 ${isActive("/maps") ? "text-accent" : ""}`}>
+        <button
+          onClick={handleMapsClick}
+          className={`flex flex-col items-center justify-center text-muted-foreground transition-all hover:text-foreground active:scale-95 ${isActive("/maps") ? "text-accent" : ""}`}
+        >
           <Map className="h-6 w-6" />
           <span className="text-xs mt-1">Cartes</span>
-        </Link>
+        </button>
         
         <button 
           onClick={handleAddClick}
@@ -89,13 +112,13 @@ export function NavBar() {
           <span className="text-xs mt-1">Ajouter</span>
         </button>
         
-        <Link 
-          to={currentMapId ? `/maps/${currentMapId}/strategies` : "/"} 
+        <button
+          onClick={handleStrategiesClick}
           className={`flex flex-col items-center justify-center text-muted-foreground transition-all hover:text-foreground active:scale-95 ${isActive("/strategies") ? "text-accent" : ""}`}
         >
           <BookOpen className="h-6 w-6" />
           <span className="text-xs mt-1">Stratégies</span>
-        </Link>
+        </button>
         
         <Link to="/binds" className={`flex flex-col items-center justify-center text-muted-foreground transition-all hover:text-foreground active:scale-95 ${isActive("/binds") ? "text-accent" : ""}`}>
           <Keyboard className="h-6 w-6" />
