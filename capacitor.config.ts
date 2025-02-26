@@ -6,8 +6,7 @@ const config: CapacitorConfig = {
   appName: 'cs2-strategy-snapshot',
   webDir: 'dist',
   server: {
-    url: 'https://c6bc0ae8-7141-4bbb-8942-f35fd55dea5e.lovableproject.com?forceHideBadge=true',
-    cleartext: true
+    androidScheme: 'https'
   },
   android: {
     buildOptions: {
