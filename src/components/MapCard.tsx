@@ -14,7 +14,22 @@ export function MapCard({ map, onClick }: MapCardProps) {
   const strategyCount = map.strategies.length;
   const utilityCount = map.utilities.length;
 
+  // Image de secours si l'image principale ne charge pas
   const fallbackImage = "/placeholder.svg";
+  
+  // Fonction pour formater correctement le chemin de l'image
+  const getImagePath = (path: string) => {
+    // Si le chemin commence par http ou https, c'est une URL externe
+    if (path.startsWith('http://') || path.startsWith('https://')) {
+      return path;
+    }
+    // Si c'est une URL d'image téléchargée via Lovable
+    if (path.includes('lovable-uploads')) {
+      return path;
+    }
+    // Sinon, c'est un chemin relatif à la racine du projet
+    return path.startsWith('/') ? path : `/${path}`;
+  };
 
   return (
     <Card
@@ -23,7 +38,7 @@ export function MapCard({ map, onClick }: MapCardProps) {
     >
       <div className="aspect-video rounded-md overflow-hidden bg-muted">
         <img
-          src={imageError ? fallbackImage : map.image}
+          src={imageError ? fallbackImage : getImagePath(map.image)}
           alt={map.name}
           className="h-full w-full object-cover"
           loading="lazy"

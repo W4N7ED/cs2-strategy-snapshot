@@ -22,6 +22,20 @@ export default function MapDetail() {
     return <div>Map non trouvée</div>;
   }
 
+  // Fonction pour formater correctement le chemin de l'image
+  const getImagePath = (path: string) => {
+    // Si le chemin commence par http ou https, c'est une URL externe
+    if (path.startsWith('http://') || path.startsWith('https://')) {
+      return path;
+    }
+    // Si c'est une URL d'image téléchargée via Lovable
+    if (path.includes('lovable-uploads')) {
+      return path;
+    }
+    // Sinon, c'est un chemin relatif à la racine du projet
+    return path.startsWith('/') ? path : `/${path}`;
+  };
+
   const handleImageUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
     if (!file) return;
@@ -80,7 +94,7 @@ export default function MapDetail() {
     <div className="min-h-screen pb-20">
       <div className="relative h-48 md:h-64">
         <img
-          src={map.image}
+          src={getImagePath(map.image)}
           alt={map.name}
           className="w-full h-full object-cover"
         />

@@ -214,6 +214,6 @@ const Index = () => {
       <NavBar />
     </div>
   );
-};
+}
 
 export default Index;

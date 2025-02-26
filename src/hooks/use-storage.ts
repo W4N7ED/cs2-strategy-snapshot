@@ -116,7 +116,7 @@ export function useStorage() {
             {
               id: uuidv4(),
               name: 'Dust 2',
-              image: '/lovable-uploads/d262f5fe-74d7-42ca-b3a7-a07061679a9a.png',
+              image: '/maps/dust2.jpg',
               category: 'premiere',
               strategies: [],
               utilities: []
@@ -124,7 +124,7 @@ export function useStorage() {
             {
               id: uuidv4(),
               name: 'Inferno',
-              image: '/lovable-uploads/29cd029e-a586-403b-9e50-61422d488396.png',
+              image: '/maps/inferno.jpg',
               category: 'premiere',
               strategies: [],
               utilities: []
@@ -132,7 +132,7 @@ export function useStorage() {
             {
               id: uuidv4(),
               name: 'Mirage',
-              image: '/lovable-uploads/513e70ad-7ebf-4281-ba31-37c102bcd501.png',
+              image: '/maps/mirage.jpg',
               category: 'premiere',
               strategies: [],
               utilities: []
@@ -140,7 +140,7 @@ export function useStorage() {
             {
               id: uuidv4(),
               name: 'Nuke',
-              image: '/lovable-uploads/e5756cf7-b358-4037-8348-f536f05f3c22.png',
+              image: '/maps/nuke.jpg',
               category: 'premiere',
               strategies: [],
               utilities: []
@@ -148,7 +148,7 @@ export function useStorage() {
             {
               id: uuidv4(),
               name: 'Vertigo',
-              image: '/lovable-uploads/c5c84b99-c95f-4fe4-aef2-01c45a6303e3.png',
+              image: '/maps/vertigo.jpg',
               category: 'premiere',
               strategies: [],
               utilities: []
@@ -156,7 +156,7 @@ export function useStorage() {
             {
               id: uuidv4(),
               name: 'Ancient',
-              image: '/lovable-uploads/9dd16682-ea66-4428-ad83-b9b861a8d03a.png',
+              image: '/maps/ancient.jpg',
               category: 'premiere',
               strategies: [],
               utilities: []
@@ -164,7 +164,7 @@ export function useStorage() {
             {
               id: uuidv4(),
               name: 'Anubis',
-              image: '/lovable-uploads/334913be-b293-4e17-b31f-4af9d214ceb1.png',
+              image: '/maps/anubis.jpg',
               category: 'premiere',
               strategies: [],
               utilities: []
@@ -172,7 +172,7 @@ export function useStorage() {
             {
               id: uuidv4(),
               name: 'Train',
-              image: '/lovable-uploads/f605a2dd-dee5-4015-95db-9bb28ce22dd2.png',
+              image: '/maps/train.jpg',
               category: 'premiere',
               strategies: [],
               utilities: []
