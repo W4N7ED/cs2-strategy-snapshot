@@ -229,6 +229,24 @@ export function useStorage() {
     return newMap;
   };
   
+  const updateMapImage = (mapId: string, imageUrl: string) => {
+    const newState = {
+      ...state,
+      maps: state.maps.map(map => {
+        if (map.id === mapId) {
+          return {
+            ...map,
+            image: imageUrl
+          };
+        }
+        return map;
+      })
+    };
+    
+    setState(newState);
+    saveToLocalStorage(newState);
+  };
+  
   const addStrategy = (mapId: string, strategy: Omit<Strategy, 'id' | 'timestamp'>) => {
     const newStrategy: Strategy = {
       id: uuidv4(),
@@ -333,6 +351,7 @@ export function useStorage() {
     addUtility,
     setCurrentMap,
     deleteStrategy,
-    deleteUtility
+    deleteUtility,
+    updateMapImage
   };
 }

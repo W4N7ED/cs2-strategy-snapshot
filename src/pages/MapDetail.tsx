@@ -3,18 +3,78 @@ import { useParams, useNavigate } from "react-router-dom";
 import { useStorage } from "../hooks/use-storage";
 import { Button } from "../components/ui/button";
 import { NavBar } from "../components/NavBar";
-import { Zap, Cloud, Bomb, BookOpen, MapPin } from "lucide-react";
+import { Zap, Cloud, Bomb, BookOpen, MapPin, Upload } from "lucide-react";
+import { useAuth } from "../contexts/auth-context";
+import { useState, useRef } from "react";
+import { toast } from "../hooks/use-toast";
 
 export default function MapDetail() {
   const { mapId } = useParams();
   const navigate = useNavigate();
-  const { state } = useStorage();
+  const { state, updateMapImage } = useStorage();
+  const { isAuthenticated } = useAuth();
+  const [uploading, setUploading] = useState(false);
+  const fileInputRef = useRef<HTMLInputElement>(null);
   
   const map = state.maps.find((m) => m.id === mapId);
   
   if (!map) {
     return <div>Map non trouvée</div>;
   }
+
+  const handleImageUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (!file) return;
+
+    setUploading(true);
+    
+    // Vérifier le type et la taille du fichier
+    if (!file.type.startsWith('image/')) {
+      toast({
+        title: "Erreur",
+        description: "Veuillez sélectionner un fichier image",
+        variant: "destructive"
+      });
+      setUploading(false);
+      return;
+    }
+
+    if (file.size > 5 * 1024 * 1024) { // 5MB limite
+      toast({
+        title: "Erreur",
+        description: "L'image est trop volumineuse (max 5MB)",
+        variant: "destructive"
+      });
+      setUploading(false);
+      return;
+    }
+
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      const imageDataUrl = e.target?.result as string;
+      
+      if (mapId) {
+        updateMapImage(mapId, imageDataUrl);
+        toast({
+          title: "Succès",
+          description: "Image de carte mise à jour avec succès"
+        });
+      }
+      
+      setUploading(false);
+    };
+    
+    reader.onerror = () => {
+      toast({
+        title: "Erreur",
+        description: "Erreur lors du chargement de l'image",
+        variant: "destructive"
+      });
+      setUploading(false);
+    };
+    
+    reader.readAsDataURL(file);
+  };
 
   return (
     <div className="min-h-screen pb-20">
@@ -28,6 +88,28 @@ export default function MapDetail() {
         <h1 className="absolute bottom-4 left-4 text-2xl font-bold text-white">
           {map.name}
         </h1>
+        
+        {isAuthenticated && (
+          <div className="absolute bottom-4 right-4">
+            <Button 
+              size="sm" 
+              variant="outline" 
+              className="bg-secondary/80 hover:bg-secondary"
+              onClick={() => fileInputRef.current?.click()}
+              disabled={uploading}
+            >
+              <Upload className="h-4 w-4 mr-2" />
+              {uploading ? "Chargement..." : "Changer l'image"}
+            </Button>
+            <input
+              type="file"
+              ref={fileInputRef}
+              onChange={handleImageUpload}
+              accept="image/*"
+              className="hidden"
+            />
+          </div>
+        )}
       </div>
 
       <main className="container px-4 py-6">
