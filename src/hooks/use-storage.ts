@@ -50,19 +50,69 @@ export function useStorage() {
             setState(updatedData);
             saveToLocalStorage(updatedData);
           } else {
-            setState(parsedData);
+            // Vérifier si on doit ajouter de nouvelles cartes
+            const existingMapNames = parsedData.maps.map((map: CSMap) => map.name);
+            const requiredPremiereMaps = ['Dust 2', 'Inferno', 'Mirage', 'Nuke', 'Vertigo', 'Ancient', 'Anubis', 'Train'];
+            const missingMaps = requiredPremiereMaps.filter(mapName => !existingMapNames.includes(mapName));
+            
+            if (missingMaps.length > 0) {
+              const newMaps = missingMaps.map(mapName => ({
+                id: uuidv4(),
+                name: mapName,
+                image: `/maps/${mapName.toLowerCase().replace(/ /g, '')}.jpg`,
+                category: 'premiere' as MapCategory,
+                strategies: [],
+                utilities: []
+              }));
+              
+              // Mettre toutes les cartes requises en catégorie "Première"
+              const updatedMaps = parsedData.maps.map((map: CSMap) => {
+                if (requiredPremiereMaps.includes(map.name)) {
+                  return {
+                    ...map,
+                    category: 'premiere' as MapCategory
+                  };
+                }
+                return map;
+              });
+              
+              const updatedData = {
+                ...parsedData,
+                maps: [...updatedMaps, ...newMaps]
+              };
+              
+              setState(updatedData);
+              saveToLocalStorage(updatedData);
+            } else {
+              // Vérifier si nous devons mettre à jour les catégories des cartes existantes
+              let needsUpdate = false;
+              const updatedMaps = parsedData.maps.map((map: CSMap) => {
+                if (requiredPremiereMaps.includes(map.name) && map.category !== 'premiere') {
+                  needsUpdate = true;
+                  return {
+                    ...map,
+                    category: 'premiere' as MapCategory
+                  };
+                }
+                return map;
+              });
+              
+              if (needsUpdate) {
+                const updatedData = {
+                  ...parsedData,
+                  maps: updatedMaps
+                };
+                
+                setState(updatedData);
+                saveToLocalStorage(updatedData);
+              } else {
+                setState(parsedData);
+              }
+            }
           }
         } else {
           // Initialize with default maps
           const defaultMaps: CSMap[] = [
-            {
-              id: uuidv4(),
-              name: 'Mirage',
-              image: '/maps/mirage.jpg',
-              category: 'premiere',
-              strategies: [],
-              utilities: []
-            },
             {
               id: uuidv4(),
               name: 'Dust 2',
@@ -81,9 +131,49 @@ export function useStorage() {
             },
             {
               id: uuidv4(),
+              name: 'Mirage',
+              image: '/maps/mirage.jpg',
+              category: 'premiere',
+              strategies: [],
+              utilities: []
+            },
+            {
+              id: uuidv4(),
               name: 'Nuke',
               image: '/maps/nuke.jpg',
-              category: 'competitive',
+              category: 'premiere',
+              strategies: [],
+              utilities: []
+            },
+            {
+              id: uuidv4(),
+              name: 'Vertigo',
+              image: '/maps/vertigo.jpg',
+              category: 'premiere',
+              strategies: [],
+              utilities: []
+            },
+            {
+              id: uuidv4(),
+              name: 'Ancient',
+              image: '/maps/ancient.jpg',
+              category: 'premiere',
+              strategies: [],
+              utilities: []
+            },
+            {
+              id: uuidv4(),
+              name: 'Anubis',
+              image: '/maps/anubis.jpg',
+              category: 'premiere',
+              strategies: [],
+              utilities: []
+            },
+            {
+              id: uuidv4(),
+              name: 'Train',
+              image: '/maps/train.jpg',
+              category: 'premiere',
               strategies: [],
               utilities: []
             },
@@ -92,30 +182,6 @@ export function useStorage() {
               name: 'Overpass',
               image: '/maps/overpass.jpg',
               category: 'competitive',
-              strategies: [],
-              utilities: []
-            },
-            {
-              id: uuidv4(),
-              name: 'Ancient',
-              image: '/maps/ancient.jpg',
-              category: 'competitive',
-              strategies: [],
-              utilities: []
-            },
-            {
-              id: uuidv4(),
-              name: 'Vertigo',
-              image: '/maps/vertigo.jpg',
-              category: 'wingman',
-              strategies: [],
-              utilities: []
-            },
-            {
-              id: uuidv4(),
-              name: 'Anubis',
-              image: '/maps/anubis.jpg',
-              category: 'wingman',
               strategies: [],
               utilities: []
             }
