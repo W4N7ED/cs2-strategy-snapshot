@@ -53,6 +53,19 @@ export default function UtilityList() {
     });
   };
 
+  // Navigation complète et explicite vers la page d'ajout
+  const handleAddUtility = () => {
+    if (mapId && utilityType) {
+      navigate(`/maps/${mapId}/utilities/${utilityType}/add`);
+    } else {
+      toast({
+        title: "Erreur",
+        description: "Impossible d'accéder à la page d'ajout",
+        variant: "destructive"
+      });
+    }
+  };
+
   return (
     <div className="min-h-screen pb-20">
       <div className="relative h-32 bg-accent/10">
@@ -70,7 +83,7 @@ export default function UtilityList() {
           <Button 
             variant="ghost" 
             size="icon"
-            onClick={() => navigate(`/maps/${mapId}/utilities/${utilityType}/add`)}
+            onClick={handleAddUtility}
           >
             <Plus className="h-6 w-6" />
           </Button>

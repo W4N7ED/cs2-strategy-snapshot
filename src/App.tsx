@@ -23,9 +23,9 @@ function App() {
         {/* Routes des stratégies */}
         <Route path="/maps/:mapId/strategies" element={<StrategyList />} />
         
-        {/* Routes des utilitaires */}
-        <Route path="/maps/:mapId/utilities/:utilityType" element={<UtilityList />} />
+        {/* Routes des utilitaires - Notez l'ordre des routes est important */}
         <Route path="/maps/:mapId/utilities/:utilityType/add" element={<AddUtility />} />
+        <Route path="/maps/:mapId/utilities/:utilityType" element={<UtilityList />} />
         
         {/* Routes des positions */}
         <Route path="/maps/:mapId/positions" element={<MapPositions />} />

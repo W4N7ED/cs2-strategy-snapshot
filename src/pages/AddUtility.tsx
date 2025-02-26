@@ -1,13 +1,12 @@
 
-import { useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { useState, useEffect } from "react";
+import { useNavigate, useParams, useLocation } from "react-router-dom";
 import { useStorage } from "../hooks/use-storage";
 import { NavBar } from "../components/NavBar";
 import { Button } from "../components/ui/button";
 import { Input } from "../components/ui/input";
 import { Label } from "../components/ui/label";
 import { Textarea } from "../components/ui/textarea";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../components/ui/select";
 import { toast } from "../hooks/use-toast";
 import { ArrowLeft } from "lucide-react";
 import { SideSelector } from "../components/SideSelector";
@@ -15,6 +14,7 @@ import { SideSelector } from "../components/SideSelector";
 export default function AddUtility() {
   const { mapId, utilityType } = useParams();
   const navigate = useNavigate();
+  const location = useLocation();
   const { addUtility } = useStorage();
   
   const [title, setTitle] = useState("");
@@ -22,13 +22,33 @@ export default function AddUtility() {
   const [showSideSelector, setShowSideSelector] = useState(false);
   const [selectedSide, setSelectedSide] = useState<'CT' | 'T' | null>(null);
   
+  // Vérifier que les paramètres nécessaires sont présents
+  useEffect(() => {
+    if (!mapId || !utilityType) {
+      console.error("Paramètres d'URL manquants:", { mapId, utilityType, path: location.pathname });
+      toast({
+        title: "Erreur",
+        description: "Paramètres manquants. Redirection vers la page d'accueil.",
+        variant: "destructive"
+      });
+      navigate("/");
+    }
+  }, [mapId, utilityType, navigate, location]);
+  
   // Validation
   const isFormValid = title.trim() !== "" && description.trim() !== "" && selectedSide !== null;
   
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     
-    if (!mapId || !utilityType || !selectedSide) return;
+    if (!mapId || !utilityType || !selectedSide) {
+      toast({
+        title: "Erreur",
+        description: "Informations incomplètes",
+        variant: "destructive"
+      });
+      return;
+    }
     
     // Vérifier que le type d'utilitaire est valide
     if (!['flash', 'smoke', 'grenade', 'molotov'].includes(utilityType)) {
@@ -49,15 +69,24 @@ export default function AddUtility() {
       media: []
     };
     
-    addUtility(mapId, newUtility);
-    
-    toast({
-      title: "Succès",
-      description: "Utilitaire ajouté avec succès"
-    });
-    
-    // Rediriger vers la liste des utilitaires
-    navigate(`/maps/${mapId}/utilities/${utilityType}`);
+    try {
+      addUtility(mapId, newUtility);
+      
+      toast({
+        title: "Succès",
+        description: "Utilitaire ajouté avec succès"
+      });
+      
+      // Rediriger vers la liste des utilitaires
+      navigate(`/maps/${mapId}/utilities/${utilityType}`);
+    } catch (error) {
+      console.error("Erreur lors de l'ajout:", error);
+      toast({
+        title: "Erreur",
+        description: "Impossible d'ajouter l'utilitaire",
+        variant: "destructive"
+      });
+    }
   };
   
   const getTypeLabel = () => {
@@ -75,13 +104,21 @@ export default function AddUtility() {
     setShowSideSelector(false);
   };
   
+  const goBack = () => {
+    if (mapId && utilityType) {
+      navigate(`/maps/${mapId}/utilities/${utilityType}`);
+    } else {
+      navigate("/");
+    }
+  };
+  
   return (
     <div className="min-h-screen pb-20">
       <div className="relative h-16 bg-accent/10 flex items-center px-4">
         <Button
           variant="ghost"
           size="icon"
-          onClick={() => navigate(`/maps/${mapId}/utilities/${utilityType}`)}
+          onClick={goBack}
         >
           <ArrowLeft className="h-6 w-6" />
         </Button>
