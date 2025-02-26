@@ -1,15 +1,20 @@
 
 import React from "react";
 import ReactDOM from "react-dom/client";
-import App from "./App.tsx";
+import App from "./App";
 import "./index.css";
-import { defineCustomElements } from '@ionic/pwa-elements/loader';
+import { BrowserRouter } from "react-router-dom";
+import { ThemeProvider } from "./contexts/theme-context";
+import { AuthProvider } from "./contexts/auth-context";
 
-// Call the element loader before the app renders
-defineCustomElements(window);
-
-ReactDOM.createRoot(document.getElementById("root")!).render(
+ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
   <React.StrictMode>
-    <App />
+    <BrowserRouter>
+      <ThemeProvider>
+        <AuthProvider>
+          <App />
+        </AuthProvider>
+      </ThemeProvider>
+    </BrowserRouter>
   </React.StrictMode>
 );
